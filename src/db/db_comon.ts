@@ -2,7 +2,6 @@ import {config} from 'dotenv'
 import {drizzle} from 'drizzle-orm/node-postgres'
 config({
     quiet: true,
-    //path: '/home/sahand/Programming/temp/nest_1/.env'
 })
 const db_url = process.env.DB_URL
 if(!db_url) {
