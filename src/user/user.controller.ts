@@ -2,6 +2,7 @@ import { Controller, Put, Get, Param,
 	Delete, Body, Post, ParseIntPipe } from '@nestjs/common';
 import { UserService } from './user.service'
 import type { User } from './user.service'
+import { Title } from '../roles/roles.service';
 
 @Controller('user')
 export class UserController {
@@ -46,9 +47,10 @@ export class UserController {
 	}
 
 	@Post()
-	async create_user(@Body('name') name: string, @Body('surname') sname: string) {
+	async create_user(@Body('name') name: string,
+		@Body('surname') sname: string, @Body('title') title: Title) {
 		try {
-			await this.users.create_user(name, sname)
+			await this.users.create_user(name, sname, title) // check if title is a valid value of Title type
 		} catch(err) {
 			throw err
 		}

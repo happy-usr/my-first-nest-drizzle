@@ -3,6 +3,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { count } from 'drizzle-orm'
 import { users_table } from './schema';
 import { eq } from 'drizzle-orm';
+import { Title } from '../roles/roles.service';
 
 type DBType = ReturnType<typeof drizzle>
 
@@ -13,15 +14,17 @@ export class DbService {
             const u = await db.select({
                 name: users_table.name,
                 surname: users_table.surname,
-                deleted: users_table.deleted
+                deleted: users_table.deleted,
+                title: users_table.title
             }).from(users_table)
             .where(eq(users_table.id, id))
 
-            let res = {name: '', surname: ''}
+            let res = {name: '', surname: '', title: Title.USER}
             if(u.length) {
                 if(!u[0].deleted) {
                     res.name = u[0].name
                     res.surname = u[0].surname
+                    res.title = u[0].title
                 }
             }
             return res
@@ -67,12 +70,13 @@ export class DbService {
         }
     }
 
-    async create_user(db: DBType, _name: string, _sname: string) {
+    async create_user(db: DBType, _name: string, _sname: string, title: Title) {
         try {
             const u = {
                 name: _name,
                 surname: _sname,
-                deleted: false
+                deleted: false,
+                title: title
             }
             await db.insert(users_table).values(u)
         } catch(err) {

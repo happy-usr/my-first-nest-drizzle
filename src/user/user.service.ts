@@ -1,12 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { make_db_default } from '../db/db_comon';
 import { DbService } from '../db/db.service'
+import { Title } from '../roles/roles.service';
 
 export interface User {
 	name: string
 	surname: string
 	id: number
 	deleted: boolean
+	title: Title
 }
 
 @Injectable()
@@ -41,9 +43,9 @@ export class UserService {
 		}
 	}
 
-	async create_user(_name: string, _sname: string) {
+	async create_user(_name: string, _sname: string, title: Title) {
 		try {
-			await this.db_service.create_user(this.db, _name, _sname)
+			await this.db_service.create_user(this.db, _name, _sname, title)
 		} catch(err) {
 			throw err
 		}
